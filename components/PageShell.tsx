@@ -243,9 +243,9 @@ export default function PageShell({ theme: t, content: c }: { theme: Theme; cont
             </div>
           </div>
           <div className="border-t border-white/10 py-6 text-center text-xs text-white/45">
-            © {new Date().getFullYear()} B.B. All rights reserved.
+            © 2026 B.Bektemirov. All rights reserved.
           </div>
-          <div className={`bg-gradient-to-r ${t.grad} bg-clip-text pb-8 text-center text-xl font-black text-transparent ${t.glow}`}>Created by B.B.</div>
+          <div className={`bg-gradient-to-r ${t.grad} bg-clip-text pb-8 text-center text-xl font-black text-transparent ${t.glow}`}>Created by B.Bektemirov</div>
         </footer>
       </div>
     </main>
