@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# B.B. Worlds: A Multi-World 3D Portfolio
+
+An interactive portfolio built with **Next.js 15**, **Three.js**, **Tailwind CSS** and **Framer Motion**. It has three themed "worlds", each with its own live 3D scene, color palette and content. A sticky navbar switches between them.
+
+> Live demo: _add your deployed link here_
+> Repository: _add your GitHub link here_
+
+![Preview](./docs/preview.png)
+<!-- Add a screenshot or GIF at docs/preview.png -->
+
+---
+
+## Overview
+
+Most portfolios are static pages. This project explores what happens when the background is a real-time 3D scene and the content scrolls over it. Each page has a distinct visual identity, but all three share one reusable component system, so adding a fourth world takes minutes.
+
+| Route | World | Theme | 3D scene |
+|---|---|---|---|
+| `/` | Minecraft & 3D | Emerald green + purple | Floating voxel terrain with a spinning crystal |
+| `/gym` | Gym & Power | Dark red + orange | Spinning metallic dumbbell |
+| `/clothing` | Streetwear | Deep purple + neon pink | Spinning glass torus knot |
+
+## Features
+
+- **Fixed 3D canvas with scrolling content:** the WebGL scene stays at `z-0` while long, rich pages scroll above it at `z-10`.
+- **Scroll and mouse reactions:** the camera follows the cursor, and the 3D object drifts as you scroll.
+- **Six sections per page:** animated hero, live stat counters, a six-card showcase, a tech-badge section and a full footer.
+- **Glassmorphism UI:** translucent, blurred cards and badges that let the 3D scene show through.
+- **Animated navigation:** a shared navbar with a sliding active-tab indicator (Framer Motion `layoutId`).
+- **Data-driven pages:** every page is a theme object plus a content object passed to one `PageShell` component.
+- **Responsive:** the 3D object moves behind the text on small screens, and grids collapse from four columns to one.
+- **Accessible motion:** respects `prefers-reduced-motion`.
+- **Clean resource handling:** geometries, materials and the renderer are disposed when you leave a page, so navigating between worlds does not leak GPU memory.
+
+## Tech Stack
+
+| Area | Tools |
+|---|---|
+| Framework | Next.js 15 (App Router), React, TypeScript |
+| 3D graphics | Three.js (WebGL): instanced meshes, physical materials, point lights, particles |
+| Styling | Tailwind CSS |
+| Animation | Framer Motion |
+| Icons | Lucide React |
+
+## Project Structure
+
+```
+.
+├── app/
+│   ├── layout.tsx          # Root layout + shared navbar
+│   ├── page.tsx            # "/"         Minecraft & 3D world
+│   ├── gym/page.tsx        # "/gym"      Gym & Power world
+│   └── clothing/page.tsx   # "/clothing" Streetwear world
+└── components/
+    ├── Scene.tsx           # Three.js canvas, one variant per world
+    ├── PageShell.tsx       # Hero, stats, cards, tech badges, footer
+    └── Navbar.tsx          # Sticky navigation with animated pill
+```
 
 ## Getting Started
 
-First, run the development server:
+**Requirements:** Node.js 18.18 or newer.
 
 ```bash
+# 1. Clone the repository
+git clone <your-repo-url>
+cd <project-folder>
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+If you are starting from a fresh Next.js project, install the extra packages first:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm i three framer-motion lucide-react
+npm i -D @types/three
+```
 
-## Learn More
+Make sure `tailwind.config` includes `./components/**/*.{ts,tsx}` in its `content` paths, so the theme classes are generated.
 
-To learn more about Next.js, take a look at the following resources:
+### Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Run the production build |
+| `npm run lint` | Lint the code |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Customizing
 
-## Deploy on Vercel
+**Change the content:** open a page file (for example `app/gym/page.tsx`) and edit the `content` object: title, stats, cards, tags and footer text.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Change the colors:** edit the `theme` object in the same file, and the matching hex colors in `PALETTE` inside `components/Scene.tsx`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Add a new world:**
+1. Add a new variant to `Variant` and `PALETTE` in `Scene.tsx`, and build its 3D object.
+2. Create `app/<name>/page.tsx` with a `theme` and `content` object.
+3. Add the route to the `NAV` array in `Navbar.tsx`.
+
+## What I Learned
+
+- Running a Three.js render loop inside React, including cleanup in `useEffect`.
+- Layering scrolling HTML over a fixed WebGL canvas without blocking scrolling.
+- Using `InstancedMesh` to draw hundreds of voxel blocks in a single draw call.
+- Designing one reusable, data-driven component system for several visual themes.
+- Respecting accessibility preferences such as reduced motion.
+
+## Roadmap
+
+- [ ] Smooth cross-fade transition of the 3D scene between routes
+- [ ] Real project links and images in the showcase cards
+- [ ] Contact form
+- [ ] Performance mode for low-power devices
+
+## Author
+
+**Bektemur Bektemirov** (B.B.): Full-Stack Developer working with HTML, CSS, JavaScript, React/Next.js and Django.
+
+- GitHub: _add your link_
+- LinkedIn: _add your link_
+- Email: _add your email_
+
+## License
+
+Released under the MIT License. See `LICENSE` for details.
